@@ -3,6 +3,7 @@ import Header from "./Header";
 import Question from "./Question";
 import PrevIcon from "./PrevIcon";
 import NextIcon from "./NextIcon";
+import { useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestions] = useState(0); //storing the index of current question (on which question the user is on)
@@ -86,33 +87,72 @@ const Quiz = () => {
     },
   ]);
 
+  const navigate = useNavigate()
+
   //initially the answers are an array of null values with equal to the number of questions in the quiz
   const [answers, setAnswers] = useState(questions.map((q) => null));
-  const goNext = ()=>setCurrentQuestions((prev)=>{
-    if(prev < questions.length-1){
-        return prev+1
-    }
-    return prev
-  })
-  const goBack = ()=>setCurrentQuestions((prev)=>{
-    if(prev>0){
-        return prev-1
-    }
-    return prev
-  })
-  console.log(currentQuestion);
-  
+
+  const goNext = () =>
+    setCurrentQuestions((prev) => {
+      if (prev < questions.length - 1) {
+        return prev + 1;
+      }
+      return prev;
+    });
+  const goBack = () =>
+    setCurrentQuestions((prev) => {
+      if (prev > 0) {
+        return prev - 1;
+      }
+      return prev;
+    });
+  // console.log(currentQuestion);
+
+  const handleAnswer = (selectedAnswer, questionId) => {
+    const questionIndex = questions.findIndex((q) => q.id === questionId);
+    setAnswers((prev) =>
+      prev.map((answer, index) => {
+        if (index === questionIndex) {
+          return selectedAnswer;
+        }
+        return answer;
+      })
+    );
+  };
+
+  const attempted = answers.filter((a) => a !== null).length;
+
+
+  const submitTest = ()=>{
+    //check if all the answers are marked, if not give warning
+    navigate('result', {
+      state : {
+        answers : answers,
+        questions : questions
+      }
+    })
+  }
+
   return (
     <div className="quiz-container">
-      <Header />
+      <Header answers={answers} />
       <div className="quiz">
-        <div style={{display:'flex', alignItems:'center'}}>
-        <PrevIcon goBack={goBack} />
-        <Question />
-        <NextIcon goNext={goNext} />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {currentQuestion > 0 && <PrevIcon goBack={goBack} />}
+          <Question
+            handleAnswer={handleAnswer}
+            //selected answer is the index of the selected question
+            selectedAnswer={answers[currentQuestion]}
+            data={questions[currentQuestion]}
+          />
+          {currentQuestion < questions.length - 1 && (
+            <NextIcon goNext={goNext} />
+          )}
         </div>
         <div className="submit">
-        <button className="custom-btn btn-3"><span>Submit</span></button>
+          <button onClick={submitTest} className="custom-btn btn-3">
+            <span>{attempted === questions.length ? "Submit" : "End Quiz"}</span>
+          </button>
         </div>
       </div>
     </div>

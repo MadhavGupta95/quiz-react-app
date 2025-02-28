@@ -17,7 +17,7 @@ code {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 80%;
+  width: 40%;
   margin: 10% auto;
 }
 
@@ -31,7 +31,8 @@ code {
 
 .question{
   width: 80%;
-  border: 5px solid lightblue;
+  border: 5px solid #458588;
+  /* background-color: lightblue; */
   border-radius: 20px;
   padding: 10px 20px;
 }
@@ -142,4 +143,13 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 }
 .btn-3 span:hover:after {
   width: 100%;
+}
+
+#option {
+  border: none;
+  background-color: #458588;
+  min-width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  color: white;
 }

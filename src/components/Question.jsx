@@ -1,19 +1,39 @@
 import React from "react";
 
-const Question = () => {
+const Question = ({ data, selectedAnswer, handleAnswer }) => {
   return (
     <>
       <div className="question">
-        <h1>Which was the largest carnivour dinosaur</h1>
+        <h1>{data.question}</h1>
         <div className="options">
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-            <button>option 1</button>
-            <button>option 2</button>
-          </div>
-          <br />
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-            <button>option 3</button>
-            <button>option 4</button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {data.options.map((option, index) => {
+              if (selectedAnswer === index) {
+                return (
+                  <button
+                    id="option"
+                    onClick={() => handleAnswer(index, data.id)}
+                    style={{ backgroundColor: "#d79921" }}
+                  >
+                    {option}
+                  </button>
+                );
+              }
+              return (
+                <button
+                  id="option"
+                  onClick={() => handleAnswer(index, data.id)}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
